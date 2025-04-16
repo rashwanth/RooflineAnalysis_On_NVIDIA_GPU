@@ -1,0 +1,142 @@
+Identifier: "SpeedOfLight_RooflineChart"
+DisplayName: "GPU Speed Of Light Roofline Chart"
+Extends: "SpeedOfLight"
+Description: "High-level overview of the utilization for compute and memory resources of the GPU presented as a roofline chart."
+Order: 11
+Sets {
+  Identifier: "detailed"
+}
+Sets {
+  Identifier: "full"
+}
+Sets {
+  Identifier: "roofline"
+}
+Body {
+  DisplayName: "SOL Rooflines"
+  Items {
+    RooflineChart {
+      Label: "Floating Point Operations Roofline"
+      AxisIntensity {
+        Label: "Arithmetic Intensity [FLOP/byte]"
+      }
+      AxisWork {
+        Label: "Performance [FLOP/s]"
+      }
+      Rooflines {
+        PeakWork {
+          ValueCyclesPerSecondExpression {
+            ValuePerCycleMetrics {
+              Name: "sm__sass_thread_inst_executed_op_ffma_pred_on.sum.peak_sustained"
+            }
+            ValuePerCycleMetrics {
+              Name: "sm__sass_thread_inst_executed_op_ffma_pred_on.sum.peak_sustained"
+            }
+            CyclesPerSecondMetric {
+              Name: "sm__cycles_elapsed.avg.per_second"
+            }
+          }
+        }
+        PeakTraffic {
+          ValueCyclesPerSecondExpression {
+            ValuePerCycleMetrics {
+              Name: "dram__bytes.sum.peak_sustained"
+            }
+            CyclesPerSecondMetric {
+              Name: "dram__cycles_elapsed.avg.per_second"
+            }
+          }
+        }
+        Options {
+          Label: "Floating Point Roofline"
+        }
+      }
+      Rooflines {
+        PeakWork {
+          ValueCyclesPerSecondExpression {
+            ValuePerCycleMetrics {
+              Name: "sm__sass_thread_inst_executed_op_dfma_pred_on.sum.peak_sustained"
+            }
+            ValuePerCycleMetrics {
+              Name: "sm__sass_thread_inst_executed_op_dfma_pred_on.sum.peak_sustained"
+            }
+            CyclesPerSecondMetric {
+              Name: "sm__cycles_elapsed.avg.per_second"
+            }
+          }
+        }
+        PeakTraffic {
+          ValueCyclesPerSecondExpression {
+            ValuePerCycleMetrics {
+              Name: "dram__bytes.sum.peak_sustained"
+            }
+            CyclesPerSecondMetric {
+              Name: "dram__cycles_elapsed.avg.per_second"
+            }
+          }
+        }
+        Options {
+          Label: "Double Roofline"
+        }
+      }
+      AchievedValues {
+        AchievedWork {
+          ValueCyclesPerSecondExpression {
+            ValuePerCycleMetrics {
+              Name: "smsp__sass_thread_inst_executed_op_fadd_pred_on.sum.per_cycle_elapsed"
+            }
+            ValuePerCycleMetrics {
+              Name: "smsp__sass_thread_inst_executed_op_fmul_pred_on.sum.per_cycle_elapsed"
+            }
+            ValuePerCycleMetrics {
+              Name: "smsp__sass_thread_inst_executed_op_ffma_pred_on.sum.per_cycle_elapsed"
+            }
+            ValuePerCycleMetrics {
+              Name: "smsp__sass_thread_inst_executed_op_ffma_pred_on.sum.per_cycle_elapsed"
+            }
+            CyclesPerSecondMetric {
+              Name: "smsp__cycles_elapsed.avg.per_second"
+            }
+          }
+        }
+        AchievedTraffic {
+          Metric {
+            Name: "dram__bytes.sum.per_second"
+          }
+        }
+        Options {
+          Label: "Floating Point Achieved Value"
+        }
+      }
+      AchievedValues {
+        AchievedWork {
+          ValueCyclesPerSecondExpression {
+            ValuePerCycleMetrics {
+              Name: "smsp__sass_thread_inst_executed_op_dadd_pred_on.sum.per_cycle_elapsed"
+            }
+            ValuePerCycleMetrics {
+              Name: "smsp__sass_thread_inst_executed_op_dmul_pred_on.sum.per_cycle_elapsed"
+            }
+            ValuePerCycleMetrics {
+              Name: "smsp__sass_thread_inst_executed_op_dfma_pred_on.sum.per_cycle_elapsed"
+            }
+            ValuePerCycleMetrics {
+              Name: "smsp__sass_thread_inst_executed_op_dfma_pred_on.sum.per_cycle_elapsed"
+            }
+            CyclesPerSecondMetric {
+              Name: "smsp__cycles_elapsed.avg.per_second"
+            }
+          }
+        }
+        AchievedTraffic {
+          Metric {
+            Name: "dram__bytes.sum.per_second"
+          }
+        }
+        Options {
+          Label: "Double Achieved Value"
+        }
+      }
+    }
+  }
+}

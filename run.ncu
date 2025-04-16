@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# We want to add our custom sections but also retain the default
+# ones that ship with the tool. We can do this by locating the
+# default sections directory, which is either in the CUDA toolkit
+# nsight-compute-20xx.yy directory or at the same level as the ncu
+# binary, depending on where it was installed.
+
+module load cuda/11.0.2
+
+ncu_dir=$(dirname $(which ncu))
+ncu_version=$(ncu --version | grep Version | awk '{ print $2 }')
+
+if [ -d $ncu_dir/sections ]; then
+    root_sections_dir=$ncu_dir/sections
+elif [ -d $ncu_dir/../nsight-compute-$ncu_version/sections ]; then
+    root_sections_dir=$ncu_dir/../nsight-compute-$ncu_version/sections
+elif [ -d /opt/nvidia/nsight-compute/$ncu_version/sections ]; then
+    root_sections_dir=/opt/nvidia/nsight-compute/$ncu_version/sections
+else
+    echo "Nsight Compute installation not found"
+    exit
+fi
+
+# gpp.f90 is parallelized using OpenACC
+module load pgi/19.10
+make clean 
+make
+
+# collect all available section files including default ones in $root_sections_dir and custom ones in ../../ncu-section-files
+# possible values for --set are default, detailed, full, source
+# use ncu --list-sets to check which section files are included in --set
+# ncu -f -o $1 --section-folder ../../ncu-section-files --section-folder $root_sections_dir --set full ./gpp.x
+
+# collect only double-precision hierarchical Roofline section file
+ncu -f -o $1 --section-folder ../../ncu-section-files --section  SpeedOfLight_HierarchicalDoubleRooflineChart ./gpp.x

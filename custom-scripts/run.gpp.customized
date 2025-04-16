@@ -1,0 +1,65 @@
+#!/bin/bash 
+#SBATCH -C gpu 
+#SBATCH --gres=gpu:1 
+#SBATCH -t 01:00:00 
+
+module load cuda/11.0.2
+module load pgi/19.10
+
+# Time
+metrics="sm__cycles_elapsed.avg,\
+sm__cycles_elapsed.avg.per_second,"
+
+# DP
+metrics+="sm__sass_thread_inst_executed_op_dadd_pred_on.sum,\
+sm__sass_thread_inst_executed_op_dfma_pred_on.sum,\
+sm__sass_thread_inst_executed_op_dmul_pred_on.sum,"
+
+# SP
+metrics+="sm__sass_thread_inst_executed_op_fadd_pred_on.sum,\
+sm__sass_thread_inst_executed_op_ffma_pred_on.sum,\
+sm__sass_thread_inst_executed_op_fmul_pred_on.sum,"
+
+# HP
+metrics+="sm__sass_thread_inst_executed_op_hadd_pred_on.sum,\
+sm__sass_thread_inst_executed_op_hfma_pred_on.sum,\
+sm__sass_thread_inst_executed_op_hmul_pred_on.sum,"
+
+# Tensor Core
+metrics+="sm__inst_executed_pipe_tensor.sum,"
+
+# DRAM, L2 and L1
+metrics+="dram__bytes.sum,\
+lts__t_bytes.sum,\
+l1tex__t_bytes.sum"
+
+cd ../example-codes/GPP/
+
+input=gpp214unformatted.dat
+dir=../../custom-scripts/
+
+# Baseline
+output=output.csv
+profilestr="ncu -k sigma_gpp_gpu --metrics $metrics --csv"
+echo Baseline version
+git checkout gpp.f90
+make clean
+make
+srun -n1 $profilestr ./gpp.x $input  > $dir/$output 2>&1
+
+# Four optimization steps 
+for n in `seq 1 4`
+do
+	output=output$n.csv
+	profilestr="ncu -k sigma_gpp_gpu --metrics $metrics --csv"
+	echo Patch version: $n
+	git checkout gpp.f90
+	patch gpp.f90 step$n.patch
+	make clean
+	make
+	srun -n1 $profilestr ./gpp.x $input   > $dir/$output 2>&1
+done
+
+module load python/3.7-anaconda-2019.10
+cd $dir
+srun -n1 python postprocess.py

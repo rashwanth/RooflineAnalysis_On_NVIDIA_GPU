@@ -1,0 +1,89 @@
+11c11
+<   complex(DPC) :: ssx_array_2, ssx_array_3, sch_array_2, sch_array_3
+---
+>   complex(DPC) :: ssx_array, sch_array
+24c24
+<   ! Write out to scalars since OpenACC does not currently support array reduction.
+---
+>   do iw = nstart, nend ! 2
+26,33c26,30
+<   ssx_array_2 = (0.0d0,0.0d0)
+<   sch_array_2 = (0.0d0,0.0d0)
+<   ssx_array_3 = (0.0d0,0.0d0)
+<   sch_array_3 = (0.0d0,0.0d0)
+< 
+<   !$ACC PARALLEL PRESENT(I_eps_array, aqsntemp)
+<   !$ACC LOOP GANG VECTOR reduction(+:ssx_array_2,sch_array_2,ssx_array_3,sch_array_3) collapse(3)
+<   do n1_loc = 1, ntband_dist ! O(1000)
+---
+>      ssx_array = (0.0d0,0.0d0)
+>      sch_array = (0.0d0,0.0d0)
+> 
+>      !$ACC PARALLEL PRESENT(I_eps_array, aqsntemp) vector_length(512)
+>      !$ACC LOOP GANG VECTOR reduction(+:ssx_array,sch_array) collapse(2)
+37c34
+<            do iw = nstart, nend ! 2
+---
+>            do n1_loc = 1, ntband_dist ! O(1000)
+43a41
+>               wdiffr = wdiff * CONJG(wdiff)
+45c43,44
+<               delw = wtilde / wdiff
+---
+>               rden = 1.0d0 / wdiffr
+>               delw = wtilde * CONJG(wdiff) * rden
+47d45
+<               wdiffr = wdiff * CONJG(wdiff)
+52c50,52
+<                  ssx = Omega2 / cden
+---
+>                  rden = cden * CONJG(cden)
+>                  rden = 1.0d0 / rden
+>                  ssx = Omega2 * CONJG(cden) * rden
+56c56,58
+<                  ssx = -Omega2 * delw / cden
+---
+>                  rden = cden * CONJG(cden)
+>                  rden = 1.0d0 / rden
+>                  ssx = -Omega2 * delw * CONJG(cden) * rden
+64,65c66,76
+<               ssxcutoff = sexcut * abs(I_eps_array(ig,igp))
+<               if (abs(ssx) .gt. ssxcutoff .and. wx_array_t(iw,n1_loc) .lt. 0.0d0) ssx=0.0d0
+---
+>               ssxcutoff = sexcut**2 * I_eps_array(ig,igp) * CONJG(I_eps_array(ig,igp))
+>               rden = ssx * CONJG(ssx)
+>               if (rden .gt. ssxcutoff .and. wx_array_t(iw,n1_loc) .lt. 0.0d0) ssx=0.0d0
+> 
+>               ssx_array = ssx_array + vcoul_loc(igp) * occ_array(n1_loc) * ssx * matngmatmgp
+>               sch_array = sch_array + vcoul_loc(igp) * sch * matngmatmgp * 0.5d0
+> 
+>            enddo ! n1_loc
+>         enddo ! ig
+>      enddo ! igp
+>      !$ACC END PARALLEL
+67,79c78,81
+<               if (iw == 2) then
+<                  ssx_array_2 = ssx_array_2 + vcoul_loc(igp) * occ_array(n1_loc) * ssx * matngmatmgp
+<                  sch_array_2 = sch_array_2 + vcoul_loc(igp) * sch * matngmatmgp * 0.5d0
+<               else 
+<                  ssx_array_3 = ssx_array_3 + vcoul_loc(igp) * occ_array(n1_loc) * ssx * matngmatmgp
+<                  sch_array_3 = sch_array_3 + vcoul_loc(igp) * sch * matngmatmgp * 0.5d0
+<               end if
+< 
+<            end do ! iw
+<         enddo ! n1_loc
+<      enddo ! ig
+<   enddo ! igp
+<   !$ACC END PARALLEL
+---
+>      asxtemp(iw) = asxtemp(iw) - ssx_array
+>      achtemp(iw) = achtemp(iw) + sch_array
+> 
+>   end do ! iw
+86,91d87
+< 
+<   asxtemp(2) = asxtemp(2) - ssx_array_2
+<   asxtemp(3) = asxtemp(3) - ssx_array_3
+< 
+<   achtemp(2) = achtemp(2) + sch_array_2
+<   achtemp(3) = achtemp(3) + sch_array_3

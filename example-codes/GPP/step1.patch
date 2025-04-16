@@ -1,0 +1,11 @@
+32,35c32,36
+<   !$ACC LOOP GANG VECTOR reduction(+:ssx_array_2,sch_array_2,ssx_array_3,sch_array_3) collapse(3)
+<   do n1_loc = 1, ntband_dist ! O(1000)
+<      do igp = 1, ngpown ! O(1000)
+<         do ig = 1, ncouls ! O(10000)
+---
+>   !$ACC LOOP GANG VECTOR reduction(+:ssx_array_2,sch_array_2,ssx_array_3,sch_array_3) collapse(2)
+>   do igp = 1, ngpown ! O(1000)
+>      do ig = 1, ncouls ! O(10000)
+>         !$ACC LOOP SEQ
+>         do n1_loc = 1, ntband_dist ! O(1000)

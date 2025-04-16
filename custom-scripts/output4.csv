@@ -1,0 +1,6 @@
+==PROF== Connected to process 6760 (/home/sai/Desktop/CS692/project/roofline-on-nvidia-gpus/example-codes/GPP/gpp.x)
+Time =  15.715 seconds.
+ asxtemp correct!
+ achtemp correct!
+==PROF== Disconnected from process 6760
+==WARNING== No kernels were profiled.
