@@ -3,3 +3,5 @@ gpp.x
 *.mod
 *.ncu-rep
 *.dat
+*.pyc
+.venv

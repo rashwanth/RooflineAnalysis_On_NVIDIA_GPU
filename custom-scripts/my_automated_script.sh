@@ -40,16 +40,25 @@ make FC=nvfortran FLAGS="-acc -gpu=cc89 -Minfo=accel -fast -Mfree -mp -Mlarge_ar
 $profilestr ./gpp.x $input > $dir/$output 2>&1
 #$profilestr --export $dir/$output ./gpp.x $input
 
-# Apply patch optimizations step-by-step
-for n in $(seq 1 2); do
+for n in $(seq 1 4); do
     output="output$n.csv"
     echo "Patch version: $n"
-    git checkout gpp.f90
-    patch gpp.f90 step$n.patch
+
+    # Start fresh every time
+    git checkout -- gpp.f90  # <- safer than just "checkout gpp.f90"
+
+    # Check if patch is already applied
+    if patch --dry-run gpp.f90 < step$n.patch > /dev/null; then
+        patch gpp.f90 < step$n.patch
+    else
+        echo "⚠️ Patch step$n.patch appears already applied or doesn't fit. Skipping..."
+        continue
+    fi
+
     make clean && make
     $profilestr ./gpp.x $input > $dir/$output 2>&1
-    #$profilestr --export $dir/$output ./gpp.x $input
 done
+
 
 # Done
 echo "Profiling complete. Output saved in $dir/"

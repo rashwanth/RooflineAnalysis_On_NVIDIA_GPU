@@ -1,6 +1,23 @@
-==PROF== Connected to process 6760 (/home/sai/Desktop/CS692/project/roofline-on-nvidia-gpus/example-codes/GPP/gpp.x)
-Time =  15.715 seconds.
+ nstart,nend            2            3
+ ngpown,ncouls,ntband_dist         1385        11075          800
+==PROF== Connected to process 16778 (/home/sai/Desktop/CS692/project/roofline-on-nvidia-gpus/example-codes/GPP/gpp.x)
+Time =  80.514 seconds.
  asxtemp correct!
  achtemp correct!
-==PROF== Disconnected from process 6760
-==WARNING== No kernels were profiled.
+==PROF== Disconnected from process 16778
+"ID","Process ID","Process Name","Host Name","Kernel Name","Context","Stream","Block Size","Grid Size","Device","CC","Section Name","Metric Name","Metric Unit","Metric Value"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","dram__bytes.sum","byte","149,562,986,752"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","l1tex__t_bytes.sum","byte","1,264,016,572,160"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","lts__t_bytes.sum","byte","263,624,724,512"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__cycles_elapsed.avg","cycle","42,579,316,766.67"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__cycles_elapsed.avg.per_second","hz","1,619,878,324.05"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__inst_executed_pipe_tensor.sum","inst","0"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_dadd_pred_on.sum","inst","111,274,472,492"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_dfma_pred_on.sum","inst","760,774,694,320"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_dmul_pred_on.sum","inst","687,938,432,432"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_fadd_pred_on.sum","inst","0"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_ffma_pred_on.sum","inst","0"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_fmul_pred_on.sum","inst","0"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_hadd_pred_on.sum","inst","0"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_hfma_pred_on.sum","inst","0"
+"0","16778","gpp.x","127.0.0.1","sigma_gpp_gpu_34","1","13","(128, 1, 1)","(65535, 1, 1)","0","8.9","Command line profiler metrics","sm__sass_thread_inst_executed_op_hmul_pred_on.sum","inst","0"
