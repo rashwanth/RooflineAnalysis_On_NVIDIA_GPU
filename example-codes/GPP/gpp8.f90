@@ -36,7 +36,7 @@ program sigma_gpp_gpu
      ssx_array = (0.0d0,0.0d0)
      sch_array = (0.0d0,0.0d0)
 
-  !$ACC PARALLEL PRESENT(I_eps_array, aqsntemp) vector_length(512)
+  !$ACC PARALLEL PRESENT(I_eps_array, aqsntemp) vector_length(32)
   !$ACC LOOP GANG VECTOR reduction(+:ssx_array,sch_array) collapse(3)
      do n1loc_blk = 1, n1loc_blksize
      do igp = 1, ngpown ! O(1000)

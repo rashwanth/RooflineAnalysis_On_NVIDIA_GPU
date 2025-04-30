@@ -34,8 +34,20 @@ mkdir -p "$dir"
 # Backup original gpp.f90
 cp gpp.f90 gpp_original_backup.f90
 
+# Baseline
+output=output.csv
+#profilestr="ncu -k sigma_gpp_gpu --metrics $metrics --csv"
+#profilestr="ncu --launch-skip 0 --launch-count 1 -k sigma_gpp_gpu --metrics $metrics --csv"
+profilestr="ncu --launch-skip 0 --launch-count 1 --metrics "$metrics" --csv ./gpp.x $input > $dir/$output 2>&1"
+
+echo "Baseline version"
+git checkout gpp.f90
+make clean
+make FC=nvfortran FLAGS="-acc -gpu=cc89 -Minfo=accel -fast -Mfree -mp -Mlarge_arrays"
+$profilestr ./gpp.x $input > $dir/$output 2>&1
+
 # Loop over all gpp versions (gpp0.f90 to gpp8.f90)
-for i in {7..8}; do
+for i in {1..8}; do
     version_file="gpp${i}.f90"
     output_csv="$dir/output${i}.csv"
 
