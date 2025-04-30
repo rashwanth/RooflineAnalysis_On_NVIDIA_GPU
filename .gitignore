@@ -5,3 +5,4 @@ gpp.x
 *.dat
 *.pyc
 .venv
+*.csv
