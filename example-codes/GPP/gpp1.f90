@@ -45,7 +45,7 @@ program sigma_gpp_gpu
 
               wdiff = wx_array_t(iw,n1_loc) - wtilde
               wdiffr = wdiff * CONJG(wdiff)
-
+              ! rcp.rn.f64 - comparatively less expensive to div.rn.f64 ⟶  reciprocal + multiplies
               rden = 1.0d0 / wdiffr
               delw = wtilde * CONJG(wdiff) * rden
               delwr = delw * CONJG(delw)

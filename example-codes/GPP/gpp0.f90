@@ -44,7 +44,7 @@ program sigma_gpp_gpu
               Omega2 = wtilde2 * I_eps_array(ig,igp)
 
               wdiff = wx_array_t(iw,n1_loc) - wtilde
-
+              ! div.rn.f64 - expensive not efficient  ⟶   costly FP64 division
               delw = wtilde / wdiff
               delwr = delw * CONJG(delw)
               wdiffr = wdiff * CONJG(wdiff)
