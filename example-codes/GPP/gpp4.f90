@@ -36,6 +36,8 @@ program sigma_gpp_gpu
      do igp = 1, ngpown ! O(1000)
         do ig = 1, ncouls ! O(10000)
 
+           ! To increase arithmetic intensity
+
            !$ACC LOOP SEQ
            do n1_loc = 1, ntband_dist ! O(1000)
            !$ACC LOOP SEQ

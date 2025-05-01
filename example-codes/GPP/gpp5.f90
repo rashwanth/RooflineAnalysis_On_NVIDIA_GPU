@@ -71,7 +71,7 @@ program sigma_gpp_gpu
               rden = ssx * CONJG(ssx)
               if (rden .gt. ssxcutoff .and. wx_array_t(iw,n1_loc) .lt. 0.0d0) ssx=0.0d0
 
-
+              ! Reduce branching again
               ssx_array = ssx_array + vcoul_loc(igp) * occ_array(n1_loc) * ssx * matngmatmgp
               sch_array = sch_array + vcoul_loc(igp) * sch * matngmatmgp * 0.5d0
 

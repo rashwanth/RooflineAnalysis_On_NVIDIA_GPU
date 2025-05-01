@@ -49,7 +49,7 @@ program sigma_gpp_gpu
               rden = 1.0d0 / wdiffr
               delw = wtilde * CONJG(wdiff) * rden
               delwr = delw * CONJG(delw)
-
+              ! Reducing branching
               sch = 0.0d0
               ssx = 0.0d0
               if (wdiffr > limittwo .and. delwr < limitone) then

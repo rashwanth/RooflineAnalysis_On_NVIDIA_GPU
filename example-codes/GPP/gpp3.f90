@@ -67,6 +67,8 @@ program sigma_gpp_gpu
 
               matngmatmgp = conjg(aqsmtemp_local(igp,n1_loc)) * aqsntemp(ig,n1_loc)
 
+              ! Repalcing abs with mathematically efficient alternative - with Multiplication
+
               ssxcutoff = sexcut**2 * I_eps_array(ig,igp) * CONJG(I_eps_array(ig,igp))
               rden = ssx * CONJG(ssx)
               if (rden .gt. ssxcutoff .and. wx_array_t(iw,n1_loc) .lt. 0.0d0) ssx=0.0d0
