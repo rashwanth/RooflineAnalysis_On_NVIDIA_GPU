@@ -29,7 +29,7 @@ make FC=nvfortran FLAGS="-acc -gpu=cc89 -Minfo=accel -fast -Mfree -mp -Mlarge_ar
 ncu --section SpeedOfLight_HierarchicalDoubleRooflineChart --section Occupancy --metrics sm__warps_active.avg,sm__warps_active.avg.pct_of_peak_sustained_active,sm__warps_launched.avg,smsp__inst_executed_pipe_fp64_fma.sum,smsp__inst_executed_pipe_fp64_mul.sum,smsp__inst_executed_pipe_fp64_add.sum --export "$output" -f ./gpp.x "$input"
 
 # Loop over all gpp versions (gpp1.f90 to gpp8.f90)
-for i in {8..8}; do
+for i in {1..8}; do
     version_file="gpp${i}.f90"
     output_rep="$dir/output${i}"
 
