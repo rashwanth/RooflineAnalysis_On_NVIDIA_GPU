@@ -13,7 +13,7 @@ markersize = 10
 markerwidth = 2
 maxchar = 25
 
-def roofline(filename, FLOPS, AIHBM, AIL2=None, AIL1=None, LABELS=None, flag='HBM'):
+def roofline(filename, FLOPS, AIGDDR6, AIL2=None, AIL1=None, LABELS=None, flag='GDDR6'):
 
     if not FLOPS:
         print('FLOPS can not be empty!')
@@ -21,19 +21,19 @@ def roofline(filename, FLOPS, AIHBM, AIL2=None, AIL1=None, LABELS=None, flag='HB
     if max(FLOPS)==0:
         print('FLOPS are all 0s!')
         return
-    if (not AIHBM) and (not AIL2) and (not AIL1):
-        print('AIHBM, AIL2 and AIL1 can not all be empty!')
+    if (not AIGDDR6) and (not AIL2) and (not AIL1):
+        print('AIGDDR6, AIL2 and AIL1 can not all be empty!')
         return
-    if (len(FLOPS) != len(AIHBM)) or (len(FLOPS) != len(AIL2)) or (len(FLOPS) != len(AIL1)):
+    if (len(FLOPS) != len(AIGDDR6)) or (len(FLOPS) != len(AIL2)) or (len(FLOPS) != len(AIL1)):
         print('FLOPS needs to have the same length as AI!')
         return
-    if (flag != 'HBM') and (flag != 'L2') and (flag != 'L1') and (flag != 'all'):
-        print('flag needs to be one of HBM, L2, L1, and all!')
+    if (flag != 'GDDR6') and (flag != 'L2') and (flag != 'L1') and (flag != 'all'):
+        print('flag needs to be one of GDDR6, L2, L1, and all!')
         return
     LABELS = [x[:maxchar] for x in LABELS]
 
-    memRoofs = [('L1', 54000.), ('L2', 2996.77),  ('HBM', 828.76)] 
-    cmpRoofs = [('Tensor', 96.9),('DP', 7.8)]
+    memRoofs = [('L1', 5000.), ('L2', 750.), ('GDDR6', 256.)]
+    cmpRoofs = [('SP', 12.36), ('DP', 0.193)]
 
     fig = plt.figure(1,figsize=(10.67,6.6))
     plt.clf()
@@ -87,7 +87,7 @@ def roofline(filename, FLOPS, AIHBM, AIL2=None, AIL1=None, LABELS=None, flag='HB
         ax.plot(x[:smem_ix_elbow[i]+1],y[:smem_ix_elbow[i]+1],c='k',ls='-',lw='2')
 
 
-    for i in range(len(AIHBM)):
+    for i in range(len(AIGDDR6)):
         if flag == 'L1':
             ax.plot(float(AIL1[i]),float(FLOPS[i]),c=colors[i%10],marker=styles[0],\
                     linestyle='None',ms=markersize,markerfacecolor='none',\
@@ -96,8 +96,8 @@ def roofline(filename, FLOPS, AIHBM, AIL2=None, AIL1=None, LABELS=None, flag='HB
             ax.plot(float(AIL2[i]),float(FLOPS[i]),c=colors[i%10],marker=styles[1],\
                     linestyle='None',ms=markersize,markerfacecolor='none',\
                     markeredgewidth=markerwidth,label=LABELS[i] if LABELS else "unknown")
-        elif flag == 'HBM':
-            ax.plot(float(AIHBM[i]),float(FLOPS[i]),c=colors[i%10],marker=styles[2],\
+        elif flag == 'GDDR6':
+            ax.plot(float(AIGDDR6[i]),float(FLOPS[i]),c=colors[i%10],marker=styles[2],\
                     linestyle='None',ms=markersize,markerfacecolor='none',\
                     markeredgewidth=markerwidth,label=LABELS[i] if LABELS else "unknown")
         elif flag == 'all':
@@ -107,7 +107,7 @@ def roofline(filename, FLOPS, AIHBM, AIL2=None, AIL1=None, LABELS=None, flag='HB
             ax.plot(float(AIL2[i]),float(FLOPS[i]),c=colors[i%10],marker=styles[1],\
                     linestyle='None',ms=markersize,markerfacecolor='none',\
                     markeredgewidth=markerwidth,label=LABELS[i] if LABELS else "unknown")
-            ax.plot(float(AIHBM[i]),float(FLOPS[i]),c=colors[i%10],marker=styles[2],\
+            ax.plot(float(AIGDDR6[i]),float(FLOPS[i]),c=colors[i%10],marker=styles[2],\
                     linestyle='None',ms=markersize,markerfacecolor='none',\
                     markeredgewidth=markerwidth,label=LABELS[i] if LABELS else "unknown")
 
@@ -119,7 +119,7 @@ def roofline(filename, FLOPS, AIHBM, AIL2=None, AIL1=None, LABELS=None, flag='HB
     elif flag == 'L2':
         marker_handles.append(ax.plot([],[],c='k',marker=styles[1],linestyle='None',ms=markersize,\
                 markerfacecolor='none',markeredgewidth=markerwidth,label=memRoofs[1][0])[0])
-    elif flag == 'HBM':
+    elif flag == 'GDDR6':
         marker_handles.append(ax.plot([],[],c='k',marker=styles[2],linestyle='None',ms=markersize,\
                 markerfacecolor='none',markeredgewidth=markerwidth,label=memRoofs[2][0])[0])
     elif flag == 'all':
@@ -163,7 +163,7 @@ def roofline(filename, FLOPS, AIHBM, AIL2=None, AIL1=None, LABELS=None, flag='HB
     ax.add_artist(leg1)
 
     patch_handles = list()
-    for i in range(0,len(AIHBM)):
+    for i in range(0,len(AIGDDR6)):
         if FLOPS[i] > 0:
             patch_handles.append(mpatches.Patch(color=colors[i%10],label = LABELS[i] if LABELS else "unknown"))
 

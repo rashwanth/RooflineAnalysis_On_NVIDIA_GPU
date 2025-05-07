@@ -44,19 +44,24 @@ program sigma_gpp_gpu
               Omega2 = wtilde2 * I_eps_array(ig,igp)
 
               wdiff = wx_array_t(iw,n1_loc) - wtilde
-
-              delw = wtilde / wdiff
-              delwr = delw * CONJG(delw)
               wdiffr = wdiff * CONJG(wdiff)
+              ! rcp.rn.f64 - comparatively less expensive to div.rn.f64 ⟶  reciprocal + multiplies
+              rden = 1.0d0 / wdiffr
+              delw = wtilde * CONJG(wdiff) * rden
+              delwr = delw * CONJG(delw)
 
               if (wdiffr > limittwo .and. delwr < limitone) then
                  sch = delw * I_eps_array(ig,igp)
                  cden = wx_array_t(iw,n1_loc)**2 - wtilde2
-                 ssx = Omega2 / cden
+                 rden = cden * CONJG(cden)
+                 rden = 1.0d0 / rden
+                 ssx = Omega2 * CONJG(cden) * rden
               else if (delwr > TOL_Zero) then
                  sch = 0.0d0
                  cden = (4.0d0 * wtilde2 * (delw + 0.5D0 ))
-                 ssx = -Omega2 * delw / cden
+                 rden = cden * CONJG(cden)
+                 rden = 1.0d0 / rden
+                 ssx = -Omega2 * delw * CONJG(cden) * rden
               else
                  sch = 0.0d0
                  ssx = 0.0d0

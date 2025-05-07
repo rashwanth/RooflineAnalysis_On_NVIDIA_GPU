@@ -21,8 +21,14 @@ for file in files:
             if 'Host Name' in ln:
                 break
         df = pd.read_csv(file, skiprows=cnt-1)
-        dft=df.groupby(['Kernel Name','Metric Name']).sum()
-        dfmetric=pd.pivot_table(dft, index='Kernel Name', columns='Metric Name', values='Metric Value')
+
+        # ✅ Fix: Convert 'Metric Value' to numeric
+        df['Metric Value'] = df['Metric Value'].replace(',', '', regex=True).astype(float)
+
+        # Proceed with aggregation and pivot
+        dft = df.groupby(['Kernel Name', 'Metric Name'])['Metric Value'].sum().reset_index()
+        dfmetric = pd.pivot_table(dft, index='Kernel Name', columns='Metric Name', values='Metric Value')
+
         dfmetric['Count']=df.groupby(['Kernel Name']).count()['ID'].div(dfmetric.shape[1])
 
         dfmetric['Time']=dfmetric['sm__cycles_elapsed.avg'] \
